@@ -1,9 +1,17 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import EDDSL from "../src/edd-sl-caching-proxy-js";
 
 const url = "https://edd-sl-proxy.geistgate.com";
 const license = "1aeec99b943061c0cd8ee59973aae9b8";
 const itemId = "82638";
+const itemName = "FMPerception - Single User";
 const activationId = "jest-testing";
+
+const wpUser = process.env.TEST_WP_USER;
+const wpPassword = process.env.TEST_WP_ACCOUNT;
+
 const eddsl = new EDDSL(url);
 
 describe("EDDSL test", () => {
@@ -69,7 +77,7 @@ describe("EDDSL test", () => {
   });
 
   it("EDDSL.login works", () => {
-    return eddsl.login("toddgeist", "hkq2z6fy").then((result: any) => {
+    return eddsl.login(wpUser, wpPassword).then((result: any) => {
       expect(result.user_email).toEqual("todd@geistinteractive.com");
       expect(result.token).toBeUndefined();
       return true;
@@ -100,7 +108,7 @@ describe("EDDSL test", () => {
   });
 
   it("EDDSL.login works again", () => {
-    return eddsl.login("toddgeist", "hkq2z6fy").then((result: any) => {
+    return eddsl.login(wpUser, wpPassword).then((result: any) => {
       expect(result.user_email).toEqual("todd@geistinteractive.com");
       expect(result.token).toBeUndefined();
       return true;
@@ -116,13 +124,11 @@ describe("EDDSL test", () => {
   });
 
   it("EDDSL.userLicenses(productName) gets an array ", () => {
-    return eddsl
-      .userLicenses("FMPerception - Single User")
-      .then((result: any) => {
-        expect(result[0].sale).toBeDefined();
-        expect(result[0].license).toBeDefined();
-        return true;
-      });
+    return eddsl.userLicenses(itemName).then((result: any) => {
+      expect(result[0].sale).toBeDefined();
+      expect(result[0].license).toBeDefined();
+      return true;
+    });
   });
 
   it("EDDSL.userLicenses fails when logged out", () => {
