@@ -4,7 +4,7 @@ this JavaScript Library connects to the EDD caching proxy server that wraps our 
 ## Install
 add 
 
-`EDDSL : 'git+https://git@github.com/geistinteractive/edd-sl-caching-proxy.git'
+`EDDSL : 'git+https://git@github.com/geistinteractive/edd-sl-caching-proxy-js.git'
 `
 
 to package.json dependancies then
