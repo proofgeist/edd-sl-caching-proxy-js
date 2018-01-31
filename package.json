@@ -12,7 +12,7 @@
   "author": "Todd Geist <todd@geistinteractive.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/geistinteractive/edd-sl-caching-proxy-js.git"
   },
   "license": "MIT",
   "engines": {
@@ -108,6 +108,7 @@
     "tslint-config-standard": "^7.0.0",
     "typedoc": "^0.9.0",
     "typescript": "^2.6.2",
+    "dotenv": "^5.0.0",
     "validate-commit-msg": "^2.12.2"
   },
   "peerDependencies": {
@@ -115,7 +116,6 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "dotenv": "^5.0.0",
     "marked": "^0.3.12"
   }
 }
