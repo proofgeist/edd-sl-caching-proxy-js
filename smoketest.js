@@ -7,7 +7,7 @@ const activationId = "jest-testing";
 const eddsl = new EDDSL(url);
 
 eddsl
-  .check(license, itemId, activationId)
+  .licenseCheck(license, itemId, activationId)
   .then(result => {
     console.log(result);
   })
