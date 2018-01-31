@@ -72,67 +72,204 @@ function __generator(thisArg, body) {
 }
 
 var EDDSL = /** @class */ (function () {
+    /**
+     *
+     * @param proxyURL the url to the proxy server
+     */
     function EDDSL(proxyURL) {
         this.proxyURL = proxyURL;
     }
     /**
+     * checks a license to see if it is still valid
+     *
+     * async and cached
      *
      * @param license the EDD License
      * @param itemId  the item ID that the license belongs too
      * @param activationId a string representing a unique install or device. EDD uses url
      */
-    EDDSL.prototype.check = function (license, itemId, activationId) {
+    EDDSL.prototype.licenseCheck = function (license, itemId, activationId) {
         return __awaiter(this, void 0, void 0, function () {
-            var e_1;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.licenseRequest(license, itemId, activationId, "check")];
+            });
+        });
+    };
+    /**
+     * activate a license
+     *
+     * async
+     *
+     * @param license edd license
+     * @param itemId the itemId of the license to activate
+     * @param activationId a string that uniqiely IDs the device
+     */
+    EDDSL.prototype.licenseActivate = function (license, itemId, activationId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.licenseRequest(license, itemId, activationId, "activate")];
+            });
+        });
+    };
+    /**
+     * deactivate a license
+     *
+     * async
+     *
+     * @param license edd license
+     * @param itemId the itemId of the license to deactivate
+     * @param activationId a string that uniqiely IDs the device
+     */
+    EDDSL.prototype.liceseDeactivate = function (license, itemId, activationId) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.licenseRequest(license, itemId, activationId, "deactivate")];
+            });
+        });
+    };
+    /**
+     * requires that the user is loggedIn already
+     *
+     * async
+     *
+     * @param productName this is the Item Name, NOT the Item Id that is used on the license methods
+     * @returns an array of licenses with sales data
+     */
+    EDDSL.prototype.userLicenses = function (productName) {
+        if (productName === void 0) { productName = ""; }
+        return __awaiter(this, void 0, void 0, function () {
+            var token, query, opts, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.rq(license, itemId, activationId, "check")];
-                    case 1: return [2 /*return*/, _a.sent()];
+                        token = this.getStoredToken();
+                        query = productName ? { productName: productName } : {};
+                        if (!token)
+                            throw Error("No Token. Login first");
+                        opts = {
+                            method: "GET",
+                            url: this.proxyURL + "/user/licenses",
+                            params: query,
+                            headers: {
+                                "Content-Type": "application/json",
+                                authorization: "Bearer " + token
+                            }
+                        };
+                        return [4 /*yield*/, axios(opts)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data];
+                }
+            });
+        });
+    };
+    /**
+     * login to EDD/Wordpress
+     * @param username the username or email address for the wordpress account
+     * @param password the password
+     */
+    EDDSL.prototype.login = function (username, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            var opts, result, data, userData;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        opts = {
+                            method: "POST",
+                            url: this.proxyURL + "/wp/login",
+                            headers: { "Content-Type": "application/json" },
+                            data: {
+                                username: username,
+                                password: password
+                            }
+                        };
+                        return [4 /*yield*/, axios(opts)];
+                    case 1:
+                        result = _a.sent();
+                        data = result.data;
+                        userData = Object.assign({}, data);
+                        delete userData.token;
+                        this.storeUserData(data);
+                        return [2 /*return*/, userData];
+                }
+            });
+        });
+    };
+    /**
+     * gets the user data from storage
+     *
+     * not async
+     */
+    EDDSL.prototype.user = function () {
+        var userData = this.getUserDataFromStorage();
+        if (userData) {
+            delete userData.token;
+            return userData;
+        }
+        return null;
+    };
+    /**
+     * log the currently logged in user out
+     *
+     * removes token and user data, but does not revoke the token
+     */
+    EDDSL.prototype.logout = function () {
+        this.deleteStoredUserData();
+        return true;
+    };
+    /**
+     * is the user logged in or not
+     *
+     * async
+     *
+     * @returns {boolean} if the user is logged in
+     */
+    EDDSL.prototype.isLoggedIn = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var userData, token, opts, result, data, valid, e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        userData = this.getUserDataFromStorage();
+                        if (userData) {
+                            token = userData.token;
+                        }
+                        else {
+                            token = ""; // maybe a better way to do this ??
+                        }
+                        opts = {
+                            method: "POST",
+                            url: this.proxyURL + "/wp/validate",
+                            headers: {
+                                "Content-Type": "application/json",
+                                authorization: "Bearer " + token
+                            }
+                        };
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, axios(opts)];
                     case 2:
+                        result = _a.sent();
+                        data = result.data;
+                        valid = data.code === "jwt_auth_valid_token";
+                        return [2 /*return*/, true];
+                    case 3:
                         e_1 = _a.sent();
-                        throw e_1;
-                    case 3: return [2 /*return*/];
+                        return [2 /*return*/, false];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
-    EDDSL.prototype.activate = function (license, itemId, activationId) {
-        return __awaiter(this, void 0, void 0, function () {
-            var e_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.rq(license, itemId, activationId, "activate")];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
-                        e_2 = _a.sent();
-                        throw e_2;
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    EDDSL.prototype.deactivate = function (license, itemId, activationId) {
-        return __awaiter(this, void 0, void 0, function () {
-            var e_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.rq(license, itemId, activationId, "deactivate")];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
-                        e_3 = _a.sent();
-                        throw e_3;
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    EDDSL.prototype.rq = function (license, itemId, activationId, action) {
+    /**
+     *
+     * @param license the license to work with
+     * @param itemId the item id for the product
+     * @param activationId the unique id for this activation
+     * @param action what action to take
+     */
+    EDDSL.prototype.licenseRequest = function (license, itemId, activationId, action) {
         return __awaiter(this, void 0, void 0, function () {
             var opts, r;
             return __generator(this, function (_a) {
@@ -153,6 +290,31 @@ var EDDSL = /** @class */ (function () {
                 }
             });
         });
+    };
+    EDDSL.prototype.getUserDataFromStorage = function () {
+        var s = localStorage.getItem("wp-user-data");
+        if (!s)
+            return null;
+        var userData = JSON.parse(s);
+        return userData;
+    };
+    EDDSL.prototype.deleteStoredUserData = function () {
+        localStorage.removeItem("wp-user-data");
+    };
+    EDDSL.prototype.storeUserData = function (data) {
+        var json = JSON.stringify(data);
+        localStorage.setItem("wp-user-data", json);
+    };
+    EDDSL.prototype.getStoredToken = function () {
+        var userData = this.getUserDataFromStorage();
+        var token;
+        if (userData) {
+            token = userData.token;
+        }
+        else {
+            token = "";
+        }
+        return token;
     };
     return EDDSL;
 }());
