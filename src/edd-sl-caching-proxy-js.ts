@@ -87,6 +87,28 @@ export default class EDDSL {
   }
 
   /**
+   * login to EDD/Wordpress But firebase token
+   * @param username the username or email address for the wordpress account
+   * @param password the password
+   */
+  async loginForFirebase(
+    username: string,
+    password: string
+  ): Promise<AxiosResponse> {
+    const opts = {
+      method: "POST",
+      url: `${this.proxyURL}/wp/loginForFirebase`,
+      headers: { "Content-Type": "application/json" },
+      data: {
+        username,
+        password
+      }
+    };
+    const result = await axios(opts);
+    return result.data;
+  }
+
+  /**
    * login to EDD/Wordpress
    * @param username the username or email address for the wordpress account
    * @param password the password

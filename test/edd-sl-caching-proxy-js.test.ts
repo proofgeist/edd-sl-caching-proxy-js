@@ -76,9 +76,17 @@ describe("EDDSL test", () => {
       });
   });
 
+  it("EDDSL.loginForFirebase works", () => {
+    return eddsl.loginForFirebase(wpUser, wpPassword).then((result: any) => {
+      expect(result.email).toEqual("todd@geistinteractive.com");
+      expect(result.token).toBeDefined();
+      return true;
+    });
+  });
+
   it("EDDSL.login works", () => {
     return eddsl.login(wpUser, wpPassword).then((result: any) => {
-      expect(result.user_email).toEqual("todd@geistinteractive.com");
+      expect(result.email).toEqual("todd@geistinteractive.com");
       expect(result.token).toBeUndefined();
       return true;
     });
@@ -92,7 +100,7 @@ describe("EDDSL test", () => {
 
   it("EDDSL.user() gets the user", () => {
     const userData = eddsl.user();
-    expect(userData.user_email).toEqual("todd@geistinteractive.com");
+    expect(userData.email).toEqual("todd@geistinteractive.com");
   });
 
   it("EDDSL.logOut() removes user Data", () => {
@@ -109,7 +117,7 @@ describe("EDDSL test", () => {
 
   it("EDDSL.login works again", () => {
     return eddsl.login(wpUser, wpPassword).then((result: any) => {
-      expect(result.user_email).toEqual("todd@geistinteractive.com");
+      expect(result.email).toEqual("todd@geistinteractive.com");
       expect(result.token).toBeUndefined();
       return true;
     });
