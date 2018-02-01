@@ -53,7 +53,7 @@ export default class EDDSL {
    * @param itemId the itemId of the license to deactivate
    * @param activationId a string that uniqiely IDs the device
    */
-  async liceseDeactivate(
+  async licenseDeactivate(
     license: string,
     itemId: string,
     activationId: string

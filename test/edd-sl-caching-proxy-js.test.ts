@@ -60,9 +60,9 @@ describe("EDDSL test", () => {
       });
   });
 
-  it("EDDSL.liceseDeactivate sets license to 'deactivated'", () => {
+  it("EDDSL.licenseDeactivate sets license to 'deactivated'", () => {
     return eddsl
-      .liceseDeactivate(license, itemId, activationId)
+      .licenseDeactivate(license, itemId, activationId)
       .then((result: any) => {
         return expect(result.license).toEqual("deactivated");
       });
