@@ -120,7 +120,7 @@ var EDDSL = /** @class */ (function () {
      * @param itemId the itemId of the license to deactivate
      * @param activationId a string that uniqiely IDs the device
      */
-    EDDSL.prototype.liceseDeactivate = function (license, itemId, activationId) {
+    EDDSL.prototype.licenseDeactivate = function (license, itemId, activationId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, this.licenseRequest(license, itemId, activationId, "deactivate")];
@@ -153,6 +153,34 @@ var EDDSL = /** @class */ (function () {
                             headers: {
                                 "Content-Type": "application/json",
                                 authorization: "Bearer " + token
+                            }
+                        };
+                        return [4 /*yield*/, axios(opts)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result.data];
+                }
+            });
+        });
+    };
+    /**
+     * login to EDD/Wordpress But firebase token
+     * @param username the username or email address for the wordpress account
+     * @param password the password
+     */
+    EDDSL.prototype.loginForFirebase = function (username, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            var opts, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        opts = {
+                            method: "POST",
+                            url: this.proxyURL + "/wp/loginForFirebase",
+                            headers: { "Content-Type": "application/json" },
+                            data: {
+                                username: username,
+                                password: password
                             }
                         };
                         return [4 /*yield*/, axios(opts)];
