@@ -62,24 +62,29 @@ export default class EDDSL {
   }
 
   /**
-   * requires that the user is loggedIn already
-   * 
-   * async
-   * 
-   * @param productName this is the Item Name, NOT the Item Id that is used on the license methods
-   * @returns an array of licenses with sales data
+   * gets the user licenses.  Needs the firebase idToken  
+   *
+   * @param email customer email address
+   * @param idToken the firebase Id token
+   * @param productName the name of the product (optional)
    */
-  async userLicenses(productName: string = ""): Promise<Array<Object>> {
-    const token = this.getStoredToken();
-    const query = productName ? { productName } : {};
-    if (!token) throw Error("No Token. Login first");
+  async userLicenses(
+    email: string,
+    idToken: string,
+    productName: string = ""
+  ): Promise<Array<Object>> {
+    const query = {
+      productName: productName ? productName : "",
+      email,
+      idToken
+    };
+
     const opts = {
       method: "GET",
       url: `${this.proxyURL}/user/licenses`,
       params: query,
       headers: {
-        "Content-Type": "application/json",
-        authorization: "Bearer " + token
+        "Content-Type": "application/json"
       }
     };
     const result = await axios(opts);

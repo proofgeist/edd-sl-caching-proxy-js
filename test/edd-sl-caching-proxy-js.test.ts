@@ -4,6 +4,7 @@ dotenv.config();
 import EDDSL from "../src/edd-sl-caching-proxy-js";
 
 const url = "https://edd-sl-proxy.geistgate.com";
+// const url = "http://localhost:3050";
 const license = "1aeec99b943061c0cd8ee59973aae9b8";
 const itemId = "82638";
 const itemName = "FMPerception - Single User";
@@ -11,6 +12,7 @@ const activationId = "jest-testing";
 
 const wpUser = process.env.TEST_WP_USER;
 const wpPassword = process.env.TEST_WP_ACCOUNT;
+const TEST_ID_TOKEN = process.env.TEST_ID_TOKEN;
 
 const eddsl = new EDDSL(url);
 
@@ -124,7 +126,7 @@ describe("EDDSL test", () => {
   });
 
   it("EDDSL.userLicenses gets an array", () => {
-    return eddsl.userLicenses().then((result: any) => {
+    return eddsl.userLicenses(wpUser, TEST_ID_TOKEN, "").then((result: any) => {
       expect(result[0].sale).toBeDefined();
       expect(result[0].license).toBeDefined();
       return true;
@@ -132,17 +134,12 @@ describe("EDDSL test", () => {
   });
 
   it("EDDSL.userLicenses(productName) gets an array ", () => {
-    return eddsl.userLicenses(itemName).then((result: any) => {
-      expect(result[0].sale).toBeDefined();
-      expect(result[0].license).toBeDefined();
-      return true;
-    });
-  });
-
-  it("EDDSL.userLicenses fails when logged out", () => {
-    eddsl.logout();
-    return eddsl.userLicenses().catch(e => {
-      expect(e).toBeDefined();
-    });
+    return eddsl
+      .userLicenses(wpUser, TEST_ID_TOKEN, itemName)
+      .then((result: any) => {
+        expect(result[0].sale).toBeDefined();
+        expect(result[0].license).toBeDefined();
+        return true;
+      });
   });
 });
