@@ -122,31 +122,30 @@ var EDDSL = /** @class */ (function () {
         });
     };
     /**
-     * requires that the user is loggedIn already
+     * gets the user licenses.  Needs the firebase idToken
      *
-     * async
-     *
-     * @param productName this is the Item Name, NOT the Item Id that is used on the license methods
-     * @returns an array of licenses with sales data
+     * @param email customer email address
+     * @param idToken the firebase Id token
+     * @param productName the name of the product (optional)
      */
-    EDDSL.prototype.userLicenses = function (productName) {
+    EDDSL.prototype.userLicenses = function (email, idToken, productName) {
         if (productName === void 0) { productName = ""; }
         return __awaiter(this, void 0, void 0, function () {
-            var token, query, opts, result;
+            var query, opts, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        token = this.getStoredToken();
-                        query = productName ? { productName: productName } : {};
-                        if (!token)
-                            throw Error("No Token. Login first");
+                        query = {
+                            productName: productName ? productName : "",
+                            email: email,
+                            idToken: idToken
+                        };
                         opts = {
                             method: "GET",
                             url: this.proxyURL + "/user/licenses",
                             params: query,
                             headers: {
-                                "Content-Type": "application/json",
-                                authorization: "Bearer " + token
+                                "Content-Type": "application/json"
                             }
                         };
                         return [4 /*yield*/, axios(opts)];

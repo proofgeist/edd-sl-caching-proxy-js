@@ -37,14 +37,13 @@ export default class EDDSL {
      */
     licenseDeactivate(license: string, itemId: string, activationId: string): Promise<AxiosResponse>;
     /**
-     * requires that the user is loggedIn already
+     * gets the user licenses.  Needs the firebase idToken
      *
-     * async
-     *
-     * @param productName this is the Item Name, NOT the Item Id that is used on the license methods
-     * @returns an array of licenses with sales data
+     * @param email customer email address
+     * @param idToken the firebase Id token
+     * @param productName the name of the product (optional)
      */
-    userLicenses(productName?: string): Promise<Array<Object>>;
+    userLicenses(email: string, idToken: string, productName?: string): Promise<Array<Object>>;
     /**
      * login to EDD/Wordpress But firebase token
      * @param username the username or email address for the wordpress account
