@@ -1,19 +1,13 @@
-# EDDSL.js - connect to EDDSL proxy server
+# edd.js - connect to EDDSL proxy server
 this JavaScript Library connects to the EDD caching proxy server that wraps our wordpress site.
 
 ## Install
-add 
 
-`EDDSL : 'git+https://git@github.com/geistinteractive/edd-sl-caching-proxy-js.git'
-`
-
-to package.json dependancies then
-
-`npm install`
+`npm install @geistinteractive/edd`
 ## Usage
 
 ```javascript
-import EDDSL from 'EDDSL'
+import EDDSL from 'eddsl'
 const edd = new EDDSL(proxyURL)
 
 edd.login(username, password).then(result=>{
