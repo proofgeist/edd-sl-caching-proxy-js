@@ -920,12 +920,12 @@ img { max-width: 100%; }
 			<h1 id="eddsl-js-connect-to-eddsl-proxy-server">EDDSL.js - connect to EDDSL proxy server</h1>
 			<p>this JavaScript Library connects to the EDD caching proxy server that wraps our wordpress site.</p>
 			<h2 id="install">Install</h2>
-			<p>add </p>
-			<p><code>EDDSL : &#39;git+https://git@github.com/geistinteractive/edd-sl-caching-proxy-js.git&#39;</code></p>
-			<p>to package.json dependancies then</p>
-			<p><code>npm install</code></p>
+			<p>Make sure you are logged into NPM using: </p>
+			<p><code>npm login</code></p>
+			<p>Then install the library using: </p>
+			<p><code>npm install @geistinteractive/edd</code></p>
 			<h2 id="usage">Usage</h2>
-			<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> EDDSL <span class="hljs-keyword">from</span> <span class="hljs-string">'EDDSL'</span>
+			<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> EDDSL <span class="hljs-keyword">from</span> <span class="hljs-string">'@geistinteractive/edd'</span>
 <span class="hljs-keyword">const</span> edd = <span class="hljs-keyword">new</span> EDDSL(proxyURL)
 
 edd.login(username, password).then(<span class="hljs-function"><span class="hljs-params">result</span>=&gt;</span>{
